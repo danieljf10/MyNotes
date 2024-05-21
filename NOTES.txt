@@ -1,2 +1,56 @@
 https://shiftkeylabs.notion.site/SKNotes-App-Overview-1b74af06760e4e93abad688fbc801dbf
 
+function App() {
+  useDeviceContext(tw);
+
+  
+  const appTitle = "Notes";
+  
+  /* 
+    Components (packaging & reusing code): - const A = () => { return <Text style=...} ... <> <A /> </>
+  */
+
+    // New Note - Page
+    
+
+    // new note button
+    const [on, setOn] = useState(false);
+    const callback = () => { !on ? setOn(true) : setOn(false) }
+
+    // Search Bar JS
+    const [text, setText] = useState();
+
+  return (
+    <Provider store={store}>
+      <SafeAreaView style={tw`bg-gray-900 flex-1`}>
+        
+        <View> 
+          <Text style={tw`w-screen p-12 text-white font-bold text-center text-4xl`}>
+            {appTitle}
+          </Text> 
+        </View>
+
+        <View style={tw`justify-center items-center`}>
+          <TextInput style={tw`w-90 h-8 bg-gray-800 rounded-lg text-white pl-2 my-1`} placeholder="Search" value={text} onChangeText={(newValue) => setText(newValue)}/>
+          <Text style={tw`text-gray-500`}>Search For: {text}</Text>
+        </View>
+
+        <View style={tw` w-full bg-gray-900 flex-1`}> 
+          <View style={tw`w-32 h-32 mx-auto mt-11 bg-teal-900 rounded-lg`}></View>
+        </View>
+
+        <TouchableOpacity style={tw`w-24 h-24 absolute bottom-8 right-8 mb-1 text-2xl mx-auto mt-30 ${on ? "bg-green-900" : "bg-blue-900"} rounded-full`} onPress={callback}>
+          <Text style={tw`text-center font-bold text-white my-auto text-2xl`}>
+            {on ? "Save" : "+" }
+          </Text>
+      </TouchableOpacity>
+        
+
+        
+
+      </SafeAreaView>
+    </Provider>
+  )
+}
+
+export default App;
