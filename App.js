@@ -12,8 +12,8 @@ import { useSearchNotesQuery, useAddNoteMutation, useDeleteNoteMutation, useUpda
 // Main Home Screen of App
 function HomeScreen({ navigation }) {
   const [searchText, setSearchText] =  useState(""); // searchText (useState Hook), setSearchText (update search text)
-  const { data: searchData, error, isLoading, } = useSearchNotesQuery(searchText); // destructuring return value
-  const [ addNote, { data: addNoteData, error: addNoteError }] = useAddNoteMutation(); // destructuring note data
+  const { data: searchData,  } = useSearchNotesQuery(searchText); // destructuring return value
+  const [ addNote, { data: addNoteData, }] = useAddNoteMutation(); // destructuring note data
   const [deleteNote] = useDeleteNoteMutation();
 
   useEffect(() => { // useEffect hook
@@ -79,17 +79,14 @@ function EditScreen({ route, navigation }) {
       id: data.id,
       title: title,
       content:  content,
-    }).then(() => { // after note
-      navigation.navigate("Home");
-    
-    });
+    })
   };
 
   const deleteNoteAndGoBack = () => {
     deleteNote({ // delete current note & its data
       id:  data.id,
     }).then(() => {
-      navigation.navigate("Home"); // navigate back to home page
+      navigation.popToTop(); // navigate back to home page
     });
   };
 
@@ -99,6 +96,18 @@ function EditScreen({ route, navigation }) {
   }, [title, content]);
 
 
+  // update & save note title
+  const handleTitleChanges = (text) => {
+    setNoteTitle(text);
+    saveCurrentNote(text);
+  }
+ // update & save note description
+  const handleDescriptionChanges = (text) => {
+    setNoteContent(text);
+    saveCurrentNote(text);
+  }
+
+ 
 // Editing note page
   return (
     <View style={tw`flex-1 p-4 bg-gray-900 `}>
@@ -106,23 +115,20 @@ function EditScreen({ route, navigation }) {
         style={tw`w-full bg-gray-800 text-white p-2 mb-2 rounded`}
         placeholder="Title"
         value= {title}
-        onChangeText={setNoteTitle} // update note title
+        onChangeText={handleTitleChanges} // update note title
       />
       <TextInput
         style={tw`w-full bg-gray-800 p-2  text-white rounded mb-2`}
         placeholder="Enter your note..."
         value= {content}
-        onChangeText={setNoteContent} // update note contnet
+        onChangeText={handleDescriptionChanges} // update note contnet
         multiline 
       /> 
-      <TouchableOpacity onPress={saveCurrentNote} style={tw`bg-blue-500 rounded p-2 mt-2  items-center justify-center`}>
-        <Text style={tw`text-white text-lg`}>Save</Text> 
-      </TouchableOpacity>
     </View>
   );
 }
 
-  const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   useDeviceContext(tw);
