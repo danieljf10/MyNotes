@@ -74,14 +74,6 @@ function EditScreen({ route, navigation }) {
     });
   }, [title]);
 
-  const saveCurrentNote = () => { // save current note
-    updateNote({ // update the note (update properties)
-      id: data.id,
-      title: title,
-      content:  content,
-    })
-  };
-
   const deleteNoteAndGoBack = () => {
     deleteNote({ // delete current note & its data
       id:  data.id,
@@ -91,7 +83,11 @@ function EditScreen({ route, navigation }) {
   };
 
   useEffect(() => { // when screen is unfocused, save current note
-    const unsubscribe  = navigation.addListener('blur', saveCurrentNote);
+    const unsubscribe  = navigation.addListener('blur', updateNote({ // update the note (update properties)
+      id: data.id,
+      title: title,
+      content:  content,
+    }));
     return unsubscribe;
   }, [title, content]);
 
@@ -99,12 +95,20 @@ function EditScreen({ route, navigation }) {
   // update & save note title
   const handleTitleChanges = (text) => {
     setNoteTitle(text);
-    saveCurrentNote(text);
+    updateNote({ // update the note (update properties)
+      id: data.id,
+      title: title,
+      content:  content,
+    })
   }
  // update & save note description
   const handleDescriptionChanges = (text) => {
     setNoteContent(text);
-    saveCurrentNote(text);
+    updateNote({ // update the note (update properties)
+      id: data.id,
+      title: title,
+      content:  content,
+    })
   }
 
  
